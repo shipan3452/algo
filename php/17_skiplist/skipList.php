@@ -37,11 +37,14 @@ class SkipList
     public function addData($data)
     {
         $newNode = new SNode($data);
+        //新增节点，随机生成一个层，每一层，对比新节点和已存在节点的大小，找到新节点插入的位置
+        //把跳跃表想成一个两层的链表，
         for ($level = $this->getRandomLevel(), $node = $this->head; $level >= 0; $level--) {
             while (isset($node->next[$level]) && $data < $node->next[$level]->data) {
                 $node = $node->next[$level];
             }
             if (isset($node->next[$level])) {
+                //每一层的插入，可以看出一个链表的插入
                 $newNode->next[$level] = $node->next[$level];
             }
             $node->next[$level] = $newNode;
@@ -67,6 +70,7 @@ class SkipList
 
     public function findData($data)
     {
+        //从最高层，一层层类似链表的数据结构查找
         for ($level = $this->head->getMaxLevel(), $node = $this->head; $level >= 0; $level--) {
             while (isset($node->next[$level]) && $data < $node->next[$level]->data) {
                 $node = $node->next[$level];
